@@ -1,0 +1,7 @@
+Creating a process chain with a wait(2)
+The program uses getopt for command line aruments
+Created own error messages for -a -i -o command line arguements
+If error occurs error message shows and program terminates
+If positive value is entered the program creates a chain of n processes, where
+n is the command-line argument.
+
