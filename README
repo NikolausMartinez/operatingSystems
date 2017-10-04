@@ -1,0 +1,7 @@
+Reads file from user to get a list of strings.
+Created Share memory to fork off child processes.
+Each of the those child processes will try to determine
+if the string they have is a palidrome or not and place the 
+string in the appropriate file.
+
+My github is https://github.com/NikolausMartinez/operatingSystems/tree/project2
