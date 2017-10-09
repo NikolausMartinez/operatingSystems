@@ -10,28 +10,44 @@ int main (int argc, char *argv[]) {
 
 	int i, n, opt;
 
-	while ((opt = getopt(argc, argv, "hslt")) != -1) {
+	int slaveProcess = 5;
+	char fileName[] = "log.txt";
+
+	int killTime = 20;
+
+	while ((opt = getopt(argc, argv, "hs:l:t:")) != -1) {
                 switch (opt) {
 		case 'h':
-			perror("oss: Erorr h");
+			perror("The command line argue ments for this progarm are -s x, l, t,\n");
+			perror("-s x, where x is the maximum number of slave processes spawened (default 5)\n");
+			perror("-l filename, where filename is the log file used\n");
+			perror("-t z, where z is the time in seconds when the master will terminate itsealf and all childeren (default 20)\n");
 			exit(EXIT_FAILURE);
 			break;
-		case 'l': 
-			perror("oss: Error l");
-			exit(EXIT_FAILURE);
+		case 'l':
+			strcpy(fileName, optarg);
 			break;
 		case 's':
-			perror("oss: Error s");
-			exit(EXIT_FAILURE);
-			break;
+			slaveProcess = atoi(optarg);
+			break;			
 		case 't':
-			perror("oss: Error t");
-			exit(EXIT_FAILURE);
-			break;		
+			killTime = atoi(optarg);
+			break;
+		case '?':
+			perror("oss: -s -l -l options require inputs after. Type option -h for more details\n");
+			exit(EXIT_FAILURE);		
                 default:
                     perror("oss: Error Default");
 		    exit(EXIT_FAILURE);
                 }
-		return 0;
 	}
+
+	FILE *file = fopen(fileName, "w");
+	char line[] = "test";
+	fprintf(file, line);
+
+	printf("File name: %s\n", fileName);
+	printf("Slave Processes: %d\n", slaveProcess);
+	printf("Kill time: %d\n", killTime);
+
 }
