@@ -42,12 +42,24 @@ int main (int argc, char *argv[]) {
                 }
 	}
 
-	FILE *file = fopen(fileName, "w");
-	char line[] = "test";
-	fprintf(file, line);
+	FILE *fp = fopen(fileName, "w");
 
 	printf("File name: %s\n", fileName);
 	printf("Slave Processes: %d\n", slaveProcess);
 	printf("Kill time: %d\n", killTime);
+
+	for (i = 1; i < slaveProcess; i++) { 
+		fork();
+		fprintf(fp, "i:%d process ID:%1d\n", i, (long)getpid());
+	}
+
+	for (i = 0; i< slaveProcess; i++) {
+		kill(slaveProcess, 9);
+		fprintf(fp,"Trying to delete slave process at %d\n",i);
+                fprintf(fp,"..........\n");
+               	fprintf(fp,"deleting slave process");
+		fprintf(fp," at %d ", i);
+		fprintf(fp,"is success\n");
+	}				
 
 }
