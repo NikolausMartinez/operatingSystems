@@ -5,14 +5,28 @@
 #include <string.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
+
+// Shared memory key
+#define KEY 90
+
+// Struct for shared memory
+struct data {
+	int x;
+	int y;
+	time_t time;
+};
+
+
 
 int main (int argc, char *argv[]) {
 
-	int i, n, opt;
-
+	// Global variables
+	int i, n, opt, shmid;
 	int slaveProcess = 5;
 	char fileName[] = "log.txt";
-
 	int killTime = 20;
 
 	while ((opt = getopt(argc, argv, "hs:l:t:")) != -1) {
@@ -41,6 +55,14 @@ int main (int argc, char *argv[]) {
 		    exit(EXIT_FAILURE);
                 }
 	}
+	
+	// Create shared memory
+	size_t shmsize = sizeof(struct data);
+	shmid = shmget(KEY, shmsize, IPC_CREAT | 0666);
+
+	// Attached to shared memory
+	struct data *data = shmat(shmid, (void *) 0, 0);
+
 
 	FILE *fp = fopen(fileName, "w");
 
@@ -60,6 +82,10 @@ int main (int argc, char *argv[]) {
                	fprintf(fp,"deleting slave process");
 		fprintf(fp," at %d ", i);
 		fprintf(fp,"is success\n");
-	}				
+	}
+
+	// Detach and delete the share memory
+	shmdt(data);
+	shmctl(shmid, IPC_RMID, NULL);				
 
 }
